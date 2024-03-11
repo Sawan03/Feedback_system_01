@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+    <!-- Include Tailwind CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+
+<body class="font-sans bg-gray-200">
+    <div class="container mx-auto mt-0 p-0 bg-white shadow-md max-w-full border">
+        <h1 class="text-3xl font-bold text-center mb-8 bg-blue-500 text-white p-4 rounded">Student Registration Page</h1>
+        <div class="grid grid-cols-2 gap-8">
+
+            <!-- Section 1: Personal Information -->
+            <div class="border p-4 rounded-md">
+                <h2 class="text-lg font-medium text-gray-600 mb-4">Personal Information</h2>
+
+                <div class="mb-4">
+                    <label for="name" class="block text-sm font-medium text-gray-600">Name:</label>
+                    <input type="text" id="name" name="name" class="mt-1 p-2 border rounded-md w-full" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="fatherName" class="block text-sm font-medium text-gray-600">Father's Name:</label>
+                    <input type="text" id="fatherName" name="fatherName" class="mt-1 p-2 border rounded-md w-full"
+                        required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="phone" class="block text-sm font-medium text-gray-600">Phone Number:</label>
+                    <input type="tel" id="phone" name="phone" class="mt-1 p-2 border rounded-md w-full" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-medium text-gray-600">Email:</label>
+                    <input type="email" id="email" name="email" class="mt-1 p-2 border rounded-md w-full" required>
+                    <small class="text-gray-500">Email must end with "@Indoreinstitute.com"</small>
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium text-gray-600">Create Password:</label>
+                    <input type="password" id="password" name="password" class="mt-1 p-2 border rounded-md w-full"
+                        required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="confirmPassword" class="block text-sm font-medium text-gray-600">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword"
+                        class="mt-1 p-2 border rounded-md w-full" required>
+                </div>
+            </div>
+
+            <!-- Section 2: Academic Information -->
+            <div class="border p-4 rounded-md">
+                <h2 class="text-lg font-medium text-gray-600 mb-4">Academic Information</h2>
+
+                <div class="mb-4">
+                    <label for="enrollmentNo" class="block text-sm font-medium text-gray-600">Enrollment No:</label>
+                    <input type="text" id="enrollmentNo" name="enrollmentNo"
+                        class="mt-1 p-2 border rounded-md w-full" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="year" class="block text-sm font-medium text-gray-600">Year:</label>
+                    <select id="year" name="year" class="mt-1 p-2 border rounded-md w-full" required>
+                        <option value="1">1st Year</option>
+                        <option value="2">2nd Year</option>
+                        <option value="3">3rd Year</option>
+                        <option value="4">4th Year</option>
+                    </select>
+                </div>
+
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-600">Branch:</label>
+                    <div class="mt-1 border rounded-md p-2">
+                        <div class="grid grid-cols-2 gap-4">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="branch" value="cs" class="form-radio" required
+                                    onclick="showSubsection('csSubsection')">
+                                <span class="ml-2">Computer Science</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="branch" value="it" class="form-radio" required
+                                    onclick="showSubsection('csSubsection')">
+                                <span class="ml-2">Information Technology</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="branch" value="civil" class="form-radio" required
+                                    onclick="hideSubsection('csSubsection')">
+                                <span class="ml-2">Civil Engineering</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="branch" value="mechanical" class="form-radio" required
+                                    onclick="hideSubsection('csSubsection')">
+                                <span class="ml-2">Mechanical Engineering</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subsection for Computer Science -->
+                <div id="csSubsection" class="hidden mb-4">
+                    <label for="subsection" class="block text-sm font-medium text-gray-600">Subsection:</label>
+                    <select id="subsection" name="subsection" class="mt-1 p-2 border rounded-md w-full">
+                        <option value="A1">A1</option>
+                        <option value="A2">A2</option>
+                        <option value="A3">A3</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+        
+            <button type="button" onclick="registerStudent()" class="bg-blue-500 text-white px-4 py-2 rounded-md">
+                Register
+            </button>
+        </div>
+        
+
+    </div>
+
+    <script>
+        function showSubsection(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function hideSubsection(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+        
+        function registerStudent() {
+            // Collect form data
+            const name = document.getElementById('name').value;
+            const fatherName = document.getElementById('fatherName').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const enrollmentNo = document.getElementById('enrollmentNo').value;
+            const year = document.getElementById('year').value;
+            const branch = document.querySelector('input[name="branch"]:checked').value;
+            const subsection = document.getElementById('subsection').value;
+    
+            // Basic validation
+            if (name.trim() === '' || fatherName.trim() === '' || phone.trim() === '' || email.trim() === '' || password.trim() === '' || confirmPassword.trim() === '' || enrollmentNo.trim() === '') {
+                alert('Please fill in all fields.');
+                return;
+            }
+    
+            // Validate email format
+            const emailPattern = /@Indoreinstitute\.com$/;
+            if (!emailPattern.test(email)) {
+                alert('Invalid email format. Please use an email ending with "@Indoreinstitute.com".');
+                return;
+            }
+    
+            // Validate password and confirm password
+            if (password !== confirmPassword) {
+                alert('Passwords do not match.');
+                return;
+            }
+    
+            // Create an object with the collected data
+            const studentData = {
+                name,
+                fatherName,
+                phone,
+                email,
+                password,
+                enrollmentNo,
+                year,
+                branch,
+                subsection
+            };
+    
+            // Make an AJAX request to send data to the Flask backend for student registration
+            fetch('/student_register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(studentData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response from the server
+                console.log(data);
+    
+                if (data.status === 'success') {
+                    alert('Student registered successfully!'); // Display success message
+                    window.location.href = '/student_login'; // Redirect to the student login page
+                } else {
+                    alert(`Error: ${data.message}`); // Display the error message from the server
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    
+            // Print the data to the console
+            console.log(studentData);
+        }
+    </script>
+
+</body>
+
+</html>

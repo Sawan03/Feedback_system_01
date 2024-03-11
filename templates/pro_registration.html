@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professor Registration</title>
+    <!-- Include Tailwind CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+
+<body class="font-sans bg-gray-100">
+
+    <div class="container mx-auto mt-8 p-8 bg-white shadow-md max-w-3xl">
+
+        <h1 class="text-3xl font-bold text-center mb-8 bg-blue-500 text-white p-4 rounded">Professor Registration Page</h1>
+
+        <div class="grid grid-cols-2 gap-8">
+
+            <!-- Section 1: Personal Information -->
+            <div class="border p-4 rounded-md">
+                <h2 class="text-lg font-medium text-gray-600 mb-4">Personal Information</h2>
+
+                <div class="mb-4">
+                    <label for="name" class="block text-sm font-medium text-gray-600">Name:</label>
+                    <input type="text" id="name" name="name" class="mt-1 p-2 border rounded-md w-full" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-medium text-gray-600">Email:</label>
+                    <input type="email" id="email" name="email" class="mt-1 p-2 border rounded-md w-full" required>
+                    <small class="text-gray-500">Email must end with "@Indoreinstitute.com"</small>
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium text-gray-600">Password:</label>
+                    <input type="password" id="password" name="password" class="mt-1 p-2 border rounded-md w-full" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="confirmPassword" class="block text-sm font-medium text-gray-600">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="mt-1 p-2 border rounded-md w-full" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="phone" class="block text-sm font-medium text-gray-600">Phone Number:</label>
+                    <input type="tel" id="phone" name="phone" class="mt-1 p-2 border rounded-md w-full" required>
+                </div>
+            </div>
+
+            <!-- Section 2: Academic Information -->
+            <div class="border p-4 rounded-md">
+                <h2 class="text-lg font-medium text-gray-600 mb-4">Academic Information</h2>
+
+                <div class="mb-4">
+                    <label for="professorId" class="block text-sm font-medium text-gray-600">Professor ID:</label>
+                    <input type="text" id="professorId" name="professorId" class="mt-1 p-2 border rounded-md w-full" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="professorYear" class="block text-sm font-medium text-gray-600">Year of Professorship:</label>
+                    <select id="professorYear" name="professorYear" class="mt-1 p-2 border rounded-md w-full" required>
+                        <option value="1">1st Year</option>
+                        <option value="2">2nd Year</option>
+                        <option value="3">3rd Year</option>
+                        <option value="4">4th Year</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-600">Branches:</label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="branches" value="cs" class="form-checkbox" required>
+                            <span class="ml-2">Computer Science</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="branches" value="it" class="form-checkbox" required>
+                            <span class="ml-2">Information Technology</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="branches" value="civil" class="form-checkbox" required>
+                            <span class="ml-2">Civil Engineering</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="branches" value="mechanical" class="form-checkbox" required>
+                            <span class="ml-2">Mechanical Engineering</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Checkbox for Subjects based on selected Year -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-600">Subjects:</label>
+                    <div class="grid grid-cols-2 gap-4" id="subjectCheckboxContainer">
+                        <!-- Subjects checkboxes will be dynamically added here based on the selected year -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="button" onclick="registerProfessor()" class="bg-blue-500 text-white px-4 py-2 rounded-md">
+                Register
+            </button>
+        </div>
+        
+    
+    </div>
+
+    <script>
+        function registerProfessor() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const phone = document.getElementById('phone').value;
+            const professorId = document.getElementById('professorId').value;
+            const professorYear = document.getElementById('professorYear').value;
+    
+            // Basic validation
+            if (name.trim() === '' || email.trim() === '' || password.trim() === '' || confirmPassword.trim() === '' || phone.trim() === '' || professorId.trim() === '') {
+                alert('Please fill in all fields.');
+                return;
+            }
+    
+            // Validate email format
+            const emailPattern = /@Indoreinstitute\.com$/;
+            if (!emailPattern.test(email)) {
+                alert('Invalid email format. Please use an email ending with "@Indoreinstitute.com".');
+                return;
+            }
+    
+            // Validate password and confirm password
+            if (password !== confirmPassword) {
+                alert('Passwords do not match.');
+                return;
+            }
+    
+            // Get selected branches
+            const selectedBranches = Array.from(document.querySelectorAll('input[name="branches"]:checked')).map(checkbox => checkbox.value);
+    
+            // Get selected subjects based on the year
+            const selectedSubjects = [];
+            const subjectCheckboxes = document.querySelectorAll('input[name="subjects"]:checked');
+            subjectCheckboxes.forEach(checkbox => selectedSubjects.push(checkbox.value));
+    
+            // Store registration details for professor
+            const professorData = {
+                name: name,
+                email: email,
+                password: password,
+                phone: phone,
+                professorId: professorId,
+                professorYear: professorYear,
+                branches: selectedBranches,
+                subjects: selectedSubjects
+            };
+    
+            // Make an AJAX request to send data to the Flask backend
+            fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(professorData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response from the server
+                console.log(data);
+    
+                if (data.status === 'success') {
+                    alert('Professor registered successfully!'); // You can customize this message
+                    window.location.href = '/login'; // Redirect to the login page
+                } else {
+                    alert(`Error: ${data.message}`); // Display the error message from the server
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+        // Function to dynamically generate subject checkboxes based on the selected year
+        document.getElementById('professorYear').addEventListener('change', function () {
+            const selectedYear = this.value;
+            const subjectCheckboxContainer = document.getElementById('subjectCheckboxContainer');
+
+            // Define subjects based on the year (you can modify this based on your requirements)
+            const subjectsByYear = {
+                1: ['Subject1', 'Subject2', 'Subject3'],
+                2: ['Subject4', 'Subject5', 'Subject6'],
+                3: ['Subject7', 'Subject8', 'Subject9'],
+                4: ['Subject10', 'Subject11', 'Subject12']
+            };
+
+            // Clear previous checkboxes
+            subjectCheckboxContainer.innerHTML = '';
+
+            // Create new checkboxes based on the selected year
+            subjectsByYear[selectedYear].forEach(subject => {
+                const checkboxLabel = document.createElement('label');
+                checkboxLabel.classList.add('inline-flex', 'items-center');
+
+                const checkboxInput = document.createElement('input');
+                checkboxInput.type = 'checkbox';
+                checkboxInput.name = 'subjects';
+                checkboxInput.value = subject;
+                checkboxInput.classList.add('form-checkbox');
+                
+                const checkboxText = document.createElement('span');
+                checkboxText.classList.add('ml-2');
+                checkboxText.textContent = subject;
+
+                checkboxLabel.appendChild(checkboxInput);
+                checkboxLabel.appendChild(checkboxText);
+
+                subjectCheckboxContainer.appendChild(checkboxLabel);
+            });
+        });
+    </script>
+
+</body>
+
+</html>

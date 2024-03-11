@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professor Dashboard</title>
+    <!-- Include Tailwind CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+
+<body class="font-sans bg-gray-100">
+
+    <div class="container mx-auto mt-8 p-8 bg-white shadow-md max-w-3xl">
+
+        <h1 class="text-3xl font-bold text-center mb-8 bg-blue-500 text-white p-4 rounded">Professor Dashboard</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="mt-4">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} text-center">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Section 1: Personal Information -->
+            <div class="border p-4 rounded-md">
+                <h2 class="text-lg font-medium text-gray-600 mb-4">Personal Information</h2>
+
+                <div class="mb-4">
+                    <strong class="text-blue-500">Name:</strong> {{ professor.name }}
+                </div>
+
+                <div class="mb-4">
+                    <strong class="text-blue-500">Email:</strong> {{ professor.email }}
+                </div>
+
+                <div class="mb-4">
+                    <strong class="text-blue-500">Phone Number:</strong> {{ professor.phone }}
+                </div>
+            </div>
+
+            <!-- Section 2: Academic Information -->
+            <div class="border p-4 rounded-md">
+                <h2 class="text-lg font-medium text-gray-600 mb-4">Academic Information</h2>
+
+                <div class="mb-4">
+                    <strong class="text-blue-500">Professor ID:</strong> {{ professor.professor_id }}
+                </div>
+
+                <div class="mb-4">
+                    <strong class="text-blue-500">Year of Professorship:</strong> {{ professor.professor_year }}
+                </div>
+
+                <div class="mb-4">
+                    <strong class="text-blue-500">Branches:</strong>
+                    <ul class="list-disc ml-6">
+                        {% for branch in professor.branches %}
+                        <li>{{ branch }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="mb-4">
+                    <strong class="text-blue-500">Subjects:</strong>
+                    <ul class="list-disc ml-6">
+                        {% for subject in professor.subjects %}
+                        <li>{{ subject }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a href="{{ url_for('logout') }}" class="bg-red-500 text-white px-4 py-2 rounded-md">Logout</a>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

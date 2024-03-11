@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <!-- Include Tailwind CSS or your preferred styling framework -->
+    <!-- Add any additional styles or scripts as needed -->
+</head>
+
+<body class="font-sans bg-gray-200">
+    <div class="container mx-auto mt-0 p-0 bg-white shadow-md max-w-full border">
+        <h1 class="text-3xl font-bold text-center mb-8 bg-blue-500 text-white p-4 rounded">Student Dashboard</h1>
+        <!-- Display student-specific information here -->
+        <div class="p-4">
+            <p><strong>Name:</strong> {{ student.name }}</p>
+        
+            <p><strong>Enrollment No:</strong> {{ student.enrollment_no }}</p>
+            <!-- Add more details as needed -->
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-200 p-4">
+
+    <div class="max-w-md mx-auto bg-white p-8 border rounded-md">
+        <h2 class="text-2xl font-semibold mb-4">Admin Page</h2>
+        <form method="post">
+            {{ form.hidden_tag() }}
+            <div class="mb-4">
+                <label for="student_dashboard" class="block text-sm font-medium text-gray-600">Student Dashboard Details:</label>
+                <input type="text" name="student_dashboard" id="student_dashboard" class="mt-1 p-2 w-full border rounded-md">
+            </div>
+            <div class="mb-4">
+                <label for="professor_dashboard" class="block text-sm font-medium text-gray-600">Professor Dashboard Details:</label>
+                <input type="text" name="professor_dashboard" id="professor_dashboard" class="mt-1 p-2 w-full border rounded-md">
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md">Generate Report</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

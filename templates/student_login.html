@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login</title>
+    <!-- Include Tailwind CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+
+<body class="font-sans bg-gray-100">
+
+    <div class="h-screen md:flex">
+        <!-- Background Image Section -->
+        <div class="relative overflow-hidden md:flex w-1/2 bg-gradient-to-tr from-blue-800 to-purple-700 justify-around items-center hidden">
+            <div>
+                <h1 class="text-white font-bold text-4xl font-sans">Student</h1>
+                <p class="text-white mt-1">student login page!</p>
+                <button type="submit" class="block w-28 bg-white text-indigo-800 mt-4 py-2 rounded-2xl font-bold mb-2">Read More</button>
+            </div>
+            <div class="absolute -bottom-32 -left-40 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
+            <div class="absolute -bottom-40 -left-20 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
+            <div class="absolute -top-40 -right-0 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
+            <div class="absolute -top-20 -right-20 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
+        </div>
+
+        <!-- Login Form Section -->
+        <div class="flex md:w-1/2 justify-center py-10 items-center bg-white">
+            <form class="bg-white">
+                <h1 class="text-gray-800 font-bold text-2xl mb-1">Student Login</h1>
+
+                <!-- Enrollment Number Input -->
+                <div class="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <input class="pl-2 outline-none border-none" type="text" id="enrollmentNo" name="enrollmentNo" placeholder="Enrollment Number" required>
+                </div>
+
+                <!-- Password Input -->
+                <div class="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                    </svg>
+                    <input class="pl-2 outline-none border-none" type="password" id="password" name="password" placeholder="Password" required>
+                </div>
+
+                <!-- Login Button -->
+                <button type="button" onclick="loginStudent()" class="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2">Login</button>
+
+                <!-- Register Button -->
+                <button type="button" onclick="redirectToRegisterPage()" class="block w-full bg-green-500 mt-2 py-2 rounded-2xl text-white font-semibold">Register</button>
+
+                <!-- Forgot Password Link -->
+                <span class="text-sm ml-2 hover:text-blue-500 cursor-pointer">Forgot Password?</span>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function loginStudent() {
+            const enrollmentNo = document.getElementById('enrollmentNo').value;
+            const password = document.getElementById('password').value;
+    
+            // Basic validation
+            if (enrollmentNo.trim() === '' || password.trim() === '') {
+                alert('Please fill in all fields.');
+                return;
+            }
+    
+            // Send the login credentials to the server for authentication
+            fetch('/student_login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    enrollment_no: enrollmentNo,
+                    password: password
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response from the server
+                if (data.status === 'success') {
+                    // Redirect to the student dashboard or another page upon successful login
+                    window.location.href = '/dashboard_student';
+                } else {
+                    alert(`Error: ${data.message}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function redirectToRegisterPage() {
+            // Redirect to the student registration page
+            window.location.href = '/student_register';
+        }
+    </script>
+
+
+</body>
+
+</html>
