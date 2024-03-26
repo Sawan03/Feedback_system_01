@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <!-- Boxicons CSS -->
+  <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    /* Google Fonts - Poppins */
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+    body {
+      min-height: 100%;
+      background: #e3f2fd;
+    }
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 70px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between; /* Added */
+      background: #fff;
+      box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+    }
+    nav .logo {
+      display: flex;
+      align-items: center;
+      margin-left: 24px; /* Updated */
+    }
+    .logo .menu-icon {
+      color: #333;
+      font-size: 24px;
+      margin-right: 14px;
+      cursor: pointer;
+    }
+    .logo .logo-name {
+      color: #333;
+      font-size: 22px;
+      font-weight: 500;
+    }
+    .nav-search {
+      display: flex;
+      align-items: center;
+      margin-right: 24px; /* Updated */
+    }
+    .nav-search input[type="text"] {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 200px;
+      margin-right: 10px;
+    }
+    .nav-search button {
+      background-color: #4b5563;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .nav-search button:hover {
+      background-color: #374151;
+    }
+    nav .sidebar {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      height: 100%;
+      width: 260px;
+      padding: 20px 0;
+      background-color: #fff;
+      box-shadow: 0 5px 1px rgba(0, 0, 0, 0.1);
+      transition: all 0.4s ease;
+    }
+    nav.open .sidebar {
+      left: 0;
+    }
+    .sidebar .sidebar-content {
+      display: flex;
+      height: 100%;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 30px 16px;
+    }
+    .sidebar-content .list {
+      list-style: none;
+    }
+    .list .nav-link {
+      display: flex;
+      align-items: center;
+      margin: 8px 0;
+      padding: 14px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+    .lists .nav-link:hover {
+      background-color: #4070f4;
+    }
+    .nav-link .icon {
+      margin-right: 14px;
+      font-size: 20px;
+      color: #707070;
+    }
+    .nav-link .link {
+      font-size: 16px;
+      color: #707070;
+      font-weight: 400;
+    }
+    .lists .nav-link:hover .icon,
+    .lists .nav-link:hover .link {
+      color: #fff;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      height: 1000vh;
+      width: 200%;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s ease;
+      background: rgba(0, 0, 0, 0.3);
+    }
+    nav.open ~ .overlay {
+      opacity: 1;
+      left: 260px;
+      pointer-events: auto;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <i class="bx bx-menu menu-icon"></i>
+      <span class="logo-name"> Dashboard</span>
+    </div>
+    <!-- Search Box -->
+    <div class="nav-search">
+      <input type="text" placeholder="Search...">
+      <button>Search</button>
+    </div>
+
+    <div class="sidebar">
+      <div class="logo">
+        <i class="bx bx-menu menu-icon"></i>
+        <span class="logo-name">Admin </span>
+      </div>
+
+      <div class="sidebar-content">
+        <ul class="lists">
+          <li class="list">
+            <a href="#Dashboard" class="nav-link">
+              <i class="bx bx-home-alt icon"></i>
+              <span class="link">Dashboard</span>
+            </a>
+          </li>
+          <li class="list">
+            <a href="#students" class="nav-link">
+              <i class="bx bx-bar-chart-alt-2 icon"></i>
+              <span class="link">Student Reports</span>
+            </a>
+          </li>
+          <li class="list">
+            <a href="#Registered_students" class="nav-link">
+              <i class="bx bx-user-plus icon"></i>
+              <span class="link">Registered_students</span>
+            </a>
+          </li>
+          <li class="list">
+            <a href="#" class="nav-link">
+              <i class="bx bx-bar-chart-alt-2 icon"></i>
+              <span class="link">Professor Reports </span>
+            </a>
+          </li>
+          <li class="list">
+            <a href="#" class="nav-link">
+              <i class="bx bx-user-plus icon"></i>
+              <span class="link">Registered_professors</span>
+            </a>
+          </li>
+        </ul>
+        <div class="bottom-cotent">
+          <li class="list">
+            <a href="#" class="nav-link">
+              <i class="bx bx-cog icon"></i>
+              <span class="link">Settings</span>
+            </a>
+          </li>
+          <li class="list">
+            <a href="#" class="nav-link">
+              <i class="bx bx-log-out icon"></i>
+              <span class="link">Logout</span>
+            </a>
+          </li>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="overlay"></section>
+  <div id="Dashboard" class="p-4 hidden">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+      <div class="bg-white p-4 rounded-md shadow-md">
+        <h2 class="text-lg font-medium text-gray-600 mb-2">Number of Students</h2>
+        <p class="text-3xl font-bold text-blue-500">{{ num_students }}</p>
+      </div>
+      <div class="bg-white p-4 rounded-md shadow-md">
+        <h2 class="text-lg font-medium text-gray-600 mb-2">Number of Professors</h2>
+        <p class="text-3xl font-bold text-blue-500">{{ num_professors }}</p>
+      </div>
+    </div>
+  </div>
+
+  
+ 
+  <!-- Display student reports -->
+  <div id="students" class="p-4">
+      <h2 class="text-xl font-bold mb-4">Student Reports</h2>
+      <table class="w-full border-collapse border border-gray-400">
+          <!-- Table contents -->
+      </table>
+  </div>
+
+   <!-- Display feedback given by students -->
+   <div id="professors" class="p-4">
+      <h2 class="text-xl font-bold mb-4">Feedback from Professors</h2>
+      <table class="w-full border-collapse border border-gray-400">
+          <thead>
+              <tr>
+                  <th class="p-3 bg-gray-200 text-gray-800 font-bold uppercase border border-gray-400">Professor Name</th>
+                  <th class="p-3 bg-gray-200 text-gray-800 font-bold uppercase border border-gray-400">Student Name</th>
+                  <th class="p-3 bg-gray-200 text-gray-800 font-bold uppercase border border-gray-400">Feedback</th>
+              </tr>
+          </thead>
+          <tbody>
+              <!-- Loop through feedback and display each row -->
+              {% for feedback_record in feedback_data %}
+              <tr>
+                  <td class="p-3 border border-gray-400">{{ feedback_record.professor.name }}</td>
+                  <td class="p-3 border border-gray-400">{{ feedback_record.student.name }}</td>
+                  <td class="p-3 border border-gray-400">{{ feedback_record.feedback_text }}</td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+  </div>
+  <!-- Section to display and delete registered students -->
+  <div id="registered_students" class="p-4">
+      <h2 class="text-xl font-bold mb-4">Registered Students</h2>
+      <table class="w-full border-collapse border border-gray-400">
+          <thead>
+              <tr>
+                  <th class="p-3 bg-gray-200 text-gray-800 font-bold uppercase border border-gray-400">Student ID</th>
+                  <th class="p-3 bg-gray-200 text-gray-800 font-bold uppercase border border-gray-400">Name</th>
+                  <th class="p-3 bg-gray-200 text-gray-800 font-bold uppercase border border-gray-400">Email</th>
+                  <th class="p-3 bg-gray-200 text-gray-800 font-bold uppercase border border-gray-400">Delete</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for student in student_data %}
+              <tr>
+                  <td class="p-3 border border-gray-400">{{ student.id }}</td>
+                  <td class="p-3 border border-gray-400">{{ student.name }}</td>
+                  <td class="p-3 border border-gray-400">{{ student.email }}</td>
+                  <td class="p-3 border border-gray-400">
+                      <button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" onclick="deleteUser('{{ student.id }}', 'student')">Delete</button>
+
+                  </td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+  </div>
+  
+  <!-- Section to display and delete registered professors -->
+  <div id="registered_professors" class="p-4">
+      <h2 class="text-xl font-bold mb-4">Registered Professors</h2>
+      <table class="w-full border-collapse border border-gray-400">
+          <thead>
+              <tr>
+                  <th class="p-3 bg-gray-200 text-gray-800 font-bold uppercase border border-gray-400">Professor ID</th>
+                  <th class="p-3 bg-gray-200 text-gray-800 font-bold uppercase border border-gray-400">Name</th>
+                  <th class="p-3 bg-gray-200 text-gray-800 font-bold uppercase border border-gray-400">Email</th>
+                  <th class="p-3 bg-gray-200 text-gray-800 font-bold uppercase border border-gray-400">Delete</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for professor in professor_data %}
+              <tr>
+                  <td class="p-3 border border-gray-400">{{ professor.id }}</td>
+                  <td class="p-3 border border-gray-400">{{ professor.name }}</td>
+                  <td class="p-3 border border-gray-400">{{ professor.email }}</td>
+                  <td class="p-3 border border-gray-400">
+                      <button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" onclick="deleteProfessor('{{ professor.id }}')">Delete</button>
+                  </td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+  </div>
+  
+</div>
+</div>
+
+
+  <script>
+    const navBar = document.querySelector("nav"),
+       menuBtns = document.querySelectorAll(".menu-icon"),
+       overlay = document.querySelector(".overlay");
+
+     menuBtns.forEach((menuBtn) => {
+       menuBtn.addEventListener("click", () => {
+         navBar.classList.toggle("open");
+       });
+     });
+
+     overlay.addEventListener("click", () => {
+       navBar.classList.remove("open");
+     });
+  </script>
+</body>
+</html>
+
+
+
+
+

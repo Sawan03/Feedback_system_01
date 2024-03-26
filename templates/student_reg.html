@@ -35,10 +35,26 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="email" class="block text-sm font-medium text-gray-600">Email:</label>
-                    <input type="email" id="email" name="email" class="mt-1 p-2 border rounded-md w-full" required>
-                    <small class="text-gray-500">Email must end with "@Indoreinstitute.com"</small>
-                </div>
+                    <!-- Inside the email input div -->
+ <div class="mb-4">
+     <label for="email" class="block text-sm font-medium text-gray-600">Email:</label>
+     <div class="flex items-center">
+         <input type="email" id="email" name="email" class="mt-1 p-2 border rounded-md w-full" required>
+         <span id="emailVerificationTick" class="hidden ml-2 text-green-500">&#10003;</span>
+         <button onclick="sendVerificationOTP()" class="ml-2 bg-blue-500 text-white px-4 py-2 rounded-md">
+             Verify
+         </button>
+     </div>
+     <small class="text-gray-500">Email must end with "@indoreinstitute.com"</small>
+ </div>
+  <!-- OTP Input Box (initially hidden) -->
+  <div id="otpBox" class="mb-4 hidden">
+    <label for="otp" class="block text-sm font-medium text-gray-600">Enter OTP:</label>
+    <input type="text" id="otp" name="otp" class="mt-1 p-2 border rounded-md w-full" required>
+    <button onclick="verifyEmail()" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md">
+        Verify OTP
+    </button>
+</div>
 
                 <div class="mb-4">
                     <label for="password" class="block text-sm font-medium text-gray-600">Create Password:</label>
@@ -133,6 +149,7 @@
             document.getElementById(id).classList.add('hidden');
         }
         
+        
         function registerStudent() {
             // Collect form data
             const name = document.getElementById('name').value;
@@ -204,6 +221,79 @@
     
             // Print the data to the console
             console.log(studentData);
+        }
+
+        function verifyEmail() {
+            const email = document.getElementById('email').value;
+            const enteredOTP = document.getElementById('otp').value;
+        
+            // Make AJAX request to verify OTP
+            fetch('/verify-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'email': email,
+                    'otp': enteredOTP,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+        
+                if (data.status === 'success') {
+                    // Mark the email as verified
+                    document.getElementById('emailVerificationTick').classList.remove('hidden');
+                    // Disable further editing of the email field
+                    document.getElementById('email').readOnly = true;
+        
+                    // Populate registration details after email verification
+                    populateRegistrationDetails();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+        function sendVerificationOTP() {
+            const email = document.getElementById('email').value;
+    
+            // Basic validation
+            if (email.trim() === '') {
+                alert('Please enter your email address.');
+                return;
+            }
+    
+            // Validate email format
+            const emailPattern = /@indoreinstitute\.com$/;
+            if (!emailPattern.test(email)) {
+                alert('Invalid email format. Please use an email ending with "@indoreinstitute.com".');
+                return;
+            }
+    
+            // Make AJAX request to send OTP
+            fetch('/send-otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'email': email,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+    
+                if (data.status === 'success') {
+                    // Display OTP input box
+                    document.getElementById('otpBox').classList.remove('hidden');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         }
     </script>
 

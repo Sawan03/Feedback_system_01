@@ -5,21 +5,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard</title>
-    <!-- Include Tailwind CSS or your preferred styling framework -->
-    <!-- Add any additional styles or scripts as needed -->
+    <!-- Include Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
 <body class="font-sans bg-gray-200">
-    <div class="container mx-auto mt-0 p-0 bg-white shadow-md max-w-full border">
-        <h1 class="text-3xl font-bold text-center mb-8 bg-blue-500 text-white p-4 rounded">Student Dashboard</h1>
+    <div class="container mx-auto mt-8 p-4 bg-white shadow-lg max-w-3xl rounded-md">
+        <h1 class="text-3xl font-bold text-center mb-8 text-blue-500">Student Dashboard</h1>
         <!-- Display student-specific information here -->
         <div class="p-4">
-            <p><strong>Name:</strong> {{ student.name }}</p>
-        
-            <p><strong>Enrollment No:</strong> {{ student.enrollment_no }}</p>
+            <p class="text-lg"><strong>Name:</strong> {{ student.name }}</p>
+            <p class="text-lg"><strong>Enrollment No:</strong> {{ student.enrollment_no }}</p>
             <!-- Add more details as needed -->
         </div>
+
+        <!-- Display associated professors and feedback forms based on schedule -->
+        <div class="p-4">
+            <h2 class="text-2xl font-bold mb-4">Associated Professors</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% for professor in professors %}
+                <div class="bg-gray-100 rounded-md p-4 shadow-md">
+                    <p class="text-lg"><strong>Name:</strong> {{ professor.name }}</p>
+                    <p class="text-lg"><strong>Email:</strong> {{ professor.email }}</p>
+                    <p class="text-lg"><strong>Phone:</strong> {{ professor.phone }}</p>
+                    <!-- Add more professor details as needed -->
+
+                    {% if professor.schedule %}
+                    <p class="text-lg mt-4"><strong>Schedule:</strong> {{ professor.schedule }}</p>
+                    {% endif %}
+
+                    <!-- Check if feedback submission is allowed based on the schedule -->
+                    {% if professor.schedule %}
+                        {% if professor.schedule == 'Daily' or professor.schedule == student.day_of_week %}
+                            <!-- Feedback form for the professor -->
+                            <form id="feedbackForm_{{ professor.id }}" class="feedbackForm mt-4">
+                                <input type="hidden" name="professor_id" value="{{ professor.id }}">
+                                <input type="hidden" name="student_id" value="{{ student.id }}">
+                                <textarea name="feedback_text" rows="4" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your feedback"></textarea>
+                                <button type="submit" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">Submit Feedback</button>
+                            </form>
+                        {% else %}
+                            <p class="text-lg mt-4 text-red-500">Feedback submission is not allowed based on the schedule.</p>
+                        {% endif %}
+                    {% else %}
+                        <!-- Feedback form for the professor -->
+                        <form id="feedbackForm_{{ professor.id }}" class="feedbackForm mt-4">
+                            <input type="hidden" name="professor_id" value="{{ professor.id }}">
+                            <input type="hidden" name="student_id" value="{{ student.id }}">
+                            <textarea name="feedback_text" rows="4" class="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your feedback"></textarea>
+                            <button type="submit" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">Submit Feedback</button>
+                        </form>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
+
+    <!-- JavaScript to display popup message after submitting feedback -->
+    <script>
+        // Add event listeners to all feedback forms
+        document.querySelectorAll('.feedbackForm').forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent form submission
+                var formData = new FormData(form); // Create form data
+                fetch(form.action, { // Send POST request to form action
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json()) // Parse response as JSON
+                .then(data => {
+                    // Display success message
+                    alert(data.message);
+                })
+                .catch(error => {
+                    // Display error message
+                    console.error('Error submitting feedback:', error);
+                    alert('An error occurred while submitting feedback. Please try again later.');
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

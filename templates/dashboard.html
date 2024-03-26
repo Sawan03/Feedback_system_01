@@ -11,78 +11,119 @@
 
 <body class="font-sans bg-gray-100">
 
-    <div class="container mx-auto mt-8 p-8 bg-white shadow-md max-w-3xl">
+    <!-- Navbar -->
+    
 
-        <h1 class="text-3xl font-bold text-center mb-8 bg-blue-500 text-white p-4 rounded">Professor Dashboard</h1>
+    <!-- Content -->
+    <div class="container mx-auto mt-8 p-8 bg-white shadow-md max-w-4x4">
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        <div class="mt-4">
-            {% for category, message in messages %}
-            <div class="alert alert-{{ category }} text-center">
-                {{ message }}
+        <nav class="bg-blue-500 p-4">
+            <div class="container mx-auto flex justify-between items-center">
+                <a href="#" class="text-white text-lg font-bold">Professor Dashboard</a>
+                <div>
+              
+                   
+                    <a href="#" class="bg-red-500 text-white px-4 py-2 ml-4 rounded-md">Logout</a>
+                </div>
             </div>
-            {% endfor %}
+        </nav>
+
+        <!-- Personal and Academic Information -->
+        <div class="border p-4 rounded-md">
+
+            <h2 class="text-lg font-medium text-gray-600 mb-4">Personal Information</h2>
+
+            <!-- Display Personal Information -->
+            <div class="mb-4">
+                <strong class="text-blue-500">ID:</strong> {{ professor.professor_id }}
+            </div>
+
+            <div class="mb-4">
+                <strong class="text-blue-500">Name:</strong> {{ professor.name }}
+            </div>
+
+            <div class="mb-4">
+                <strong class="text-blue-500">Year of Professorship:</strong> {{ professor.professor_year }}
+            </div>
+
         </div>
-        {% endif %}
-        {% endwith %}
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- Section 1: Personal Information -->
-            <div class="border p-4 rounded-md">
-                <h2 class="text-lg font-medium text-gray-600 mb-4">Personal Information</h2>
+       
 
-                <div class="mb-4">
-                    <strong class="text-blue-500">Name:</strong> {{ professor.name }}
-                </div>
-
-                <div class="mb-4">
-                    <strong class="text-blue-500">Email:</strong> {{ professor.email }}
-                </div>
-
-                <div class="mb-4">
-                    <strong class="text-blue-500">Phone Number:</strong> {{ professor.phone }}
-                </div>
-            </div>
-
-            <!-- Section 2: Academic Information -->
-            <div class="border p-4 rounded-md">
-                <h2 class="text-lg font-medium text-gray-600 mb-4">Academic Information</h2>
-
-                <div class="mb-4">
-                    <strong class="text-blue-500">Professor ID:</strong> {{ professor.professor_id }}
-                </div>
-
-                <div class="mb-4">
-                    <strong class="text-blue-500">Year of Professorship:</strong> {{ professor.professor_year }}
-                </div>
-
-                <div class="mb-4">
-                    <strong class="text-blue-500">Branches:</strong>
-                    <ul class="list-disc ml-6">
-                        {% for branch in professor.branches %}
-                        <li>{{ branch }}</li>
+         
+        <form id="userDataForm" action="/submit_user_data" method="POST">
+            <!-- Student Data Table -->
+            <div class="border p-4 rounded-md mt-8 overflow-x-auto">
+                <h2 class="text-lg font-medium text-gray-600 mb-4">Student Data</h2>
+                <table class="w-full border-collapse border border-gray-400">
+                    <thead>
+                        <tr>
+                            <th class="p-3 bg-gray-200 text-gray-800 font-bold uppercase border border-gray-400">Student Name</th>
+                            <th class="p-3 bg-gray-200 text-gray-800 font-bold uppercase border border-gray-400">Enrollment No</th>
+                            <th class="p-3 bg-gray-200 text-gray-800 font-bold uppercase border border-gray-400">Attendance</th>
+                            <th class="p-3 bg-gray-200 text-gray-800 font-bold uppercase border border-gray-400">Marks</th>
+                            <th class="p-3 bg-gray-200 text-gray-800 font-bold uppercase border border-gray-400">Behavior</th>
+                            <th class="p-3 bg-gray-200 text-gray-800 font-bold uppercase border border-gray-400">Actions</th>
+                            <!-- Add more columns as needed -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Loop through student data and display each row -->
+                        {% for student in student_data %}
+                        <tr>
+                            <td class="p-3 border border-gray-400">{{ student.name }}</td>
+                            <td class="p-3 border border-gray-400">{{ student.enrollment_no }}</td>
+                            <td class="p-3 border border-gray-400"><input type="text" name="attendance_{{ student.id }}" placeholder="Attendance"></td>
+                            <td class="p-3 border border-gray-400"><input type="text" name="marks_{{ student.id }}" placeholder="Marks"></td>
+                            <td class="p-3 border border-gray-400"><input type="text" name="behavior_{{ student.id }}" placeholder="Behavior"></td>
+                            <td class="p-3 border border-gray-400"><button class="bg-blue-500 text-white px-4 py-2 rounded-md" type="submit">Submit</button></td>
+                        </tr>
                         {% endfor %}
-                    </ul>
-                </div>
-
-                <div class="mb-4">
-                    <strong class="text-blue-500">Subjects:</strong>
-                    <ul class="list-disc ml-6">
-                        {% for subject in professor.subjects %}
-                        <li>{{ subject }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
+                    </tbody>
+                </table>
             </div>
-        </div>
-
-        <div class="mt-4">
-            <a href="{{ url_for('logout') }}" class="bg-red-500 text-white px-4 py-2 rounded-md">Logout</a>
-        </div>
+        </form>
+        
 
     </div>
 
 </body>
+<script>
+    document.querySelector('#userDataForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(this);
+        const jsonData = {};
+
+        for (const [key, value] of formData.entries()) {
+            jsonData[key] = value;
+        }
+
+        fetch('/submit_user_data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            // Show success message
+            alert('Data submitted successfully!');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Show error message
+            alert('An error occurred while submitting the data. Please try again later.');
+        });
+    });
+</script>
+
 
 </html>
