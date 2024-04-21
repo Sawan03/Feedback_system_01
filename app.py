@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 import random
 from flask_mail import Mail, Message
 from sqlalchemy.schema import UniqueConstraint
+from textblob import TextBlob
+
 
 
 app = Flask(__name__)
@@ -87,12 +89,43 @@ def submit_user_data():
         return jsonify({'error': str(e)})
     
 @app.route('/submit_feedback', methods=['POST'])
+# def submit_feedback():
+#     if request.method == 'POST':
+#         # Extract data from the request
+#         professor_id = request.form['professor_id']
+#         student_id = request.form['student_id']
+#         feedback_text = request.form['feedback_text']
+
+#         # Create a new Feedback object
+#         new_feedback = Feedback(professor_id=professor_id, student_id=student_id, feedback_text=feedback_text)
+
+#         try:
+#             # Add the new feedback to the database session and commit changes
+#             db.session.add(new_feedback)
+#             db.session.commit()
+#             return jsonify({'status': 'success', 'message': 'Feedback submitted successfully'})
+#         except Exception as e:
+#             # If an error occurs, rollback changes and return an error response
+#             db.session.rollback()
+#             return jsonify({'status': 'error', 'message': str(e)}), 500
+
+
+@app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
     if request.method == 'POST':
         # Extract data from the request
         professor_id = request.form['professor_id']
         student_id = request.form['student_id']
         feedback_text = request.form['feedback_text']
+
+        # Perform sentiment analysis on the feedback text
+        feedback_sentiment = TextBlob(feedback_text).sentiment
+        polarity = feedback_sentiment.polarity  # Sentiment polarity ranges from -1 to 1
+        subjectivity = feedback_sentiment.subjectivity  # Subjectivity ranges from 0 to 1
+
+        # Here you can define your scoring logic based on polarity and subjectivity
+        # For example, you can calculate a score based on the sentiment polarity
+        score = calculate_score(polarity)
 
         # Create a new Feedback object
         new_feedback = Feedback(professor_id=professor_id, student_id=student_id, feedback_text=feedback_text)
@@ -101,11 +134,24 @@ def submit_feedback():
             # Add the new feedback to the database session and commit changes
             db.session.add(new_feedback)
             db.session.commit()
-            return jsonify({'status': 'success', 'message': 'Feedback submitted successfully'})
+            
+            # Return the sentiment analysis results along with the response
+            return jsonify({'status': 'success', 'message': 'Feedback submitted successfully', 'score': score, 'polarity': polarity, 'subjectivity': subjectivity})
         except Exception as e:
             # If an error occurs, rollback changes and return an error response
             db.session.rollback()
             return jsonify({'status': 'error', 'message': str(e)}), 500
+
+def calculate_score(polarity):
+    # Define your scoring logic here
+    # This is just a simple example, you can adjust it based on your requirements
+    if polarity > 0.5:
+        return 'High Score'
+    elif polarity > 0:
+        return 'Medium Score'
+    else:
+        return 'Low Score'
+
        
 
 @app.route('/send-otp', methods=['POST'])
